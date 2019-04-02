@@ -25,6 +25,8 @@ namespace hangman
         private List<char> userGuesses = new List<char>();
         private int numberOfGuesses = 0;
         private int wrongGuesses = 0;
+        
+        // Contains path to the image file corresponding to the current hanging status
         public string HangmanImage
         {
             get
@@ -54,6 +56,8 @@ namespace hangman
             }
         }
         private string hangmanWord;
+
+        //Censors non-guessed letters apart from the symbols (' - , . : ; and space)
         public string HangmanWord
         {
             get
@@ -95,20 +99,25 @@ namespace hangman
         {
             if (enterLetterTextbox.Text != "")
             {
+                //Take care of entering same letter multiple times
                 if (userGuesses.Contains(enterLetterTextbox.Text.ToLower()[0]))
                 {
                     MessageBox.Show(String.Format("You have already tried {0}", enterLetterTextbox.Text.ToLower())); }
                 else
                 {
+                    //Add entry to already entered letters and increase number of guesses
                     userGuesses.Add(enterLetterTextbox.Text.ToLower()[0]);
                     enteredGuessesContentLabel.GetBindingExpression(Label.ContentProperty).UpdateTarget();
                     numberOfGuesses++;
+                    
+                    //Wrong letter
                     if (!hangmanWord.ToLower().Contains(enterLetterTextbox.Text.ToLower()[0]))
                     {
                         wrongGuesses++;
                         hangingStatus.GetBindingExpression(Image.SourceProperty).UpdateTarget();
                     }
                 }
+                //If not game over
                 if (wrongGuesses < 10)
                 {
                     enterLetterTextbox.Clear();
@@ -128,6 +137,7 @@ namespace hangman
 
         }
 
+        //For tracking changes in the "enter letter" textbox
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName = null)
